@@ -1,7 +1,7 @@
 // Author: Adam Bryant
 // Creation Date: April. 15th, 2014
 // Last Edited: April. 15th, 2014
-// Version: 0.01
+// Version: 0.03
 // Generic Class Definition
 
 #pragma once
@@ -30,7 +30,10 @@ namespace BT
 			, mpRight(pRight)
 		{ }
 
-		~Node();
+		~Node()
+		{
+
+		}
 
 		Node<T>* mpParent;
 		Node<T>* mpLeft;
@@ -124,8 +127,107 @@ namespace DS
 	template <typename T>
 	void BinaryTree<T>::Delete(T data)
 	{
-		Node<T>* pCurNode = mpRoot;
 		Node<T>** pParentAddr = GetParentNode(data);
+		Node<T>* pCurNode = nullptr;
+
+		// Target Node has parent
+		if (pParentAddr != nullptr)
+		{
+			pCurNode = (*pParentAddr);
+		}
+
+		// Is Root
+		else
+		{
+			pCurNode = mpRoot;
+		}
+
+		// Target Node does not have Left Child
+		if (pCurNode->mpLeft == nullptr)
+		{
+			// Target Node does not have Right Child
+			if (pCurNode->mpRight == nullptr)
+			{
+				delete pCurNode;
+
+				// Is Root
+				if (pParentAddr == nullptr)
+				{
+					mpRoot = nullptr;
+				}
+
+				// Not Root
+				else
+				{
+					(*pParentAddr) = nullptr;
+				}
+			}
+
+			// Target Node has Right Child
+			else
+			{
+				Node<T>** pLeafParent = &(pCurNode->mpRight);
+				Node<T>* pTempLeaf = pCurNode->mpRight;
+				delete pCurNode;
+
+				// Is Root
+				if (pParentAddr == nullptr)
+				{
+					mpRoot = pTempLeaf;
+				}
+
+				// Not Root
+				else
+				{
+					(*pParentAddr) = pTempLeaf;
+				}
+			}
+		}
+
+		// Target Node has Left Child
+		else
+		{
+			// Move left one position from the to-be-deleted node.
+			Node<T>* pTempLeaf = pCurNode->mpLeft;
+
+			// Traverse as far right as possible, to find parent of leaf.
+			Node<T>** pLeafParent = nullptr;
+			while (pTempLeaf->mpRight != nullptr)
+			{
+				pLeafParent = &(pTempLeaf->mpRight);
+				pTempLeaf = pTempLeaf->mpRight;
+			}
+
+			// Remove old parent's reference to leaf.
+			if (pLeafParent != nullptr)
+			{
+				(*pLeafParent) = pTempLeaf->mpLeft;
+			}
+
+			if (pCurNode->mpRight != nullptr && pCurNode->mpRight->GetValue() != pTempLeaf->GetValue())
+			{
+				pTempLeaf->mpRight = pCurNode->mpRight;		// Leaf right = target right
+			}
+
+			if (pCurNode->mpLeft != nullptr && pCurNode->mpLeft->GetValue() != pTempLeaf->GetValue())
+			{
+				pTempLeaf->mpLeft = pCurNode->mpLeft;		// Leaf left = target left
+			}
+
+			delete pCurNode;
+
+			// Is Root
+			if (pParentAddr == nullptr)
+			{
+				mpRoot = pTempLeaf;
+			}
+
+			// Not Root
+			else
+			{
+				(*pParentAddr) = pTempLeaf;
+			}
+		}
 	}
 
 	//-----------------------------------------------------------------------------------------------------------
@@ -157,10 +259,16 @@ namespace DS
 			}
 
 			// pNode is less
-			else
+			else if (data < pCurNode->GetValue())
 			{
 				pParentAddr = &(pCurNode->mpRight);
 				pCurNode = pCurNode->mpRight;
+			}
+
+			// pNode is the same
+			else
+			{
+				break;
 			}
 		}
 
@@ -172,6 +280,11 @@ namespace DS
 } // Namespace: DS
 
 /** Changelog
+
+2014-04-22 10:02 UTC - Zageron
+- Implemented base of Deletion function.
+- Tested all deletion cases.
+- Version: 0.03
 
 2014-04-22 09:02 UTC - Zageron
 - Main changed to reflect Insert format change.
