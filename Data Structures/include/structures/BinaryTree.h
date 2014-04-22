@@ -72,6 +72,7 @@ namespace DS
 		// Enumeration?
 
 	private:
+		Node<T>** GetParentNode(T data);
 		Node<T>* mpRoot;
 	};
 
@@ -104,31 +105,10 @@ namespace DS
 	template <typename T>
 	void BinaryTree<T>::Insert(T data)
 	{
-		Node<T>* pCurNode = mpRoot;
-		Node<T>** pParentAddr = nullptr;
-
-		while (pCurNode != nullptr)
-		{
-			// TODO: Implement a better error check for identical insertions.
-			//assert(pNode->GetValue() == pCurNode->GetValue());
-
-			// pNode is greater
-			if (pNode->GetValue() > pCurNode->GetValue())
-			{
-				pParentAddr = &(pCurNode->mpLeft);
-				pCurNode = pCurNode->mpLeft;
-			}
-
-			// pNode is less
-			else
-			{
-				pParentAddr = &(pCurNode->mpRight);
-				pCurNode = pCurNode->mpRight;
-			}
-		}
+		Node<T>** pParentAddr = GetParentNode(data);
 
 		// Root is empty
-		const BT::Node<T>& = new BT::Node<T>()
+		BT::Node<T>* pNode = new BT::Node<T>(data);
 		if (mpRoot == nullptr)
 		{
 			mpRoot = pNode;
@@ -136,7 +116,6 @@ namespace DS
 		else 
 		{
 			(*pParentAddr) = pNode;
-			new BT::Node<u32>(10)
 		}
 	}
 
@@ -145,7 +124,8 @@ namespace DS
 	template <typename T>
 	void BinaryTree<T>::Delete(T data)
 	{
-
+		Node<T>* pCurNode = mpRoot;
+		Node<T>** pParentAddr = GetParentNode(data);
 	}
 
 	//-----------------------------------------------------------------------------------------------------------
@@ -160,13 +140,46 @@ namespace DS
 
 	//-----------------------------------------------------------------------------------------------------------
 
+	template <typename T>
+	Node<T>** BinaryTree<T>::GetParentNode(T data)
+	{
+		Node<T>* pCurNode = mpRoot;
+		Node<T>** pParentAddr = nullptr;
+
+		// Find the parent of the target node.
+		while (pCurNode != nullptr)
+		{
+			// pNode is greater
+			if (data > pCurNode->GetValue())
+			{
+				pParentAddr = &(pCurNode->mpLeft);
+				pCurNode = pCurNode->mpLeft;
+			}
+
+			// pNode is less
+			else
+			{
+				pParentAddr = &(pCurNode->mpRight);
+				pCurNode = pCurNode->mpRight;
+			}
+		}
+
+		return pParentAddr;
+	}
+
+	//-----------------------------------------------------------------------------------------------------------
+
 } // Namespace: DS
 
-/*
-	Changelog
+/** Changelog
 
-	2014-04-22 08:30 UTC - Zageron
-	- Added changelog
-	- Completed Insert
-	- Version: 0.01
+2014-04-22 09:02 UTC - Zageron
+- Main changed to reflect Insert format change.
+- GetParentNode created to remove code copypaste.
+- Version: 0.02
+
+2014-04-22 08:30 UTC - Zageron
+- Added changelog
+- Completed Insert
+- Version: 0.01
 */
