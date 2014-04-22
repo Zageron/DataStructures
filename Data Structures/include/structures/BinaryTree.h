@@ -1,7 +1,7 @@
 // Author: Adam Bryant
 // Creation Date: April. 15th, 2014
 // Last Edited: April. 15th, 2014
-// Version: 0.0
+// Version: 0.01
 // Generic Class Definition
 
 #pragma once
@@ -161,3 +161,12 @@ namespace DS
 	//-----------------------------------------------------------------------------------------------------------
 
 } // Namespace: DS
+
+/*
+	Changelog
+
+	2014-04-22 08:30 UTC - Zageron
+	- Added changelog
+	- Completed Insert
+	- Version: 0.01
+*/
