@@ -1,6 +1,6 @@
 // Author: Adam Bryant
 // Creation Date: April. 15th, 2014
-// Last Edited: April. 15th, 2014
+// Last Edited: April. 22nd, 2014
 // Version: 0.03
 // Generic Class Definition
 
@@ -44,7 +44,7 @@ namespace BT
 	private:
 		T mValue;
 	};
-}
+} // Namespace: BT
 
 using BT::Node;
 
@@ -279,6 +279,20 @@ namespace DS
 
 } // Namespace: DS
 
+/** TODO
+
+- Balance Tree
+	- Insertion?
+	- Deletion?
+	- Rotation?
+	
+- Pruning
+- Grafting
+- Meta-Programming Improvements
+- Actual Template type support (Interface?)
+
+*/
+
 /** Changelog
 
 2014-04-22 10:02 UTC - Zageron
@@ -295,4 +309,5 @@ namespace DS
 - Added changelog
 - Completed Insert
 - Version: 0.01
+
 */
